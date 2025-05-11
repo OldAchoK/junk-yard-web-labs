@@ -1,5 +1,7 @@
 from django.shortcuts import HttpResponse
+from .models import Product
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Hello World! From product")
+    products = Product.objects.all()
+    return HttpResponse(products)
