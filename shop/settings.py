@@ -39,7 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #'goods.apps.GoodsConfig',
     'product.apps.ProductConfig',
+    'tastypie',
+    'api'
 ]
+
+TASTYPIE_DEFAULT_FORMATS = ['json']
+TASTYPIE_ALLOW_MISSING_SLASH = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
