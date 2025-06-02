@@ -1,0 +1,77 @@
+{% extends 'product/layout.html' %}
+
+{% block title %}Головна - Мій Магазин{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">Ласкаво просимо до нашого магазину!</h1>
+        
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Категорії</h5>
+                        <h2>{{ categories_count }}</h2>
+                        <a href="{% url 'categories' %}" class="text-white">Переглянути всі →</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Продукти</h5>
+                        <h2>{{ products_count }}</h2>
+                        <a href="{% url 'products' %}" class="text-white">Переглянути всі →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Products -->
+        <div class="row">
+            <div class="col-12">
+                <h3>Останні продукти</h3>
+                <div class="row">
+                    {% for product in recent_products %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.title }}</h5>
+                                <p class="card-text">
+                                    <strong>Ціна:</strong> {{ product.price }}$<br>
+                                    <strong>Категорія:</strong> {{ product.category.title }}
+                                </p>
+                                <a href="{% url 'product-detail' product.slug %}" class="btn btn-primary">Детальніше</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <h3>Навігація</h3>
+                <div class="list-group">
+                    <a href="{% url 'categories' %}" class="list-group-item list-group-item-action">
+                        📂 Переглянути категорії
+                    </a>
+                    <a href="{% url 'category-create' %}" class="list-group-item list-group-item-action">
+                        ➕ Створити категорію
+                    </a>
+                    <a href="{% url 'products' %}" class="list-group-item list-group-item-action">
+                        🛍️ Переглянути продукти
+                    </a>
+                    <a href="{% url 'product-create' %}" class="list-group-item list-group-item-action">
+                        ➕ Створити продукт
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

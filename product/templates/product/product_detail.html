@@ -1,0 +1,61 @@
+{% extends 'product/layout.html' %}
+
+{% block title %}{{ product.title }} - Мій Магазин{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{{ product.title }}</h1>
+    <div class="btn-group">
+        <a href="{% url 'product-update' product.slug %}" class="btn btn-warning">Редагувати</a>
+        <a href="{% url 'product-delete' product.slug %}" class="btn btn-danger">Видалити</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Деталі продукту</h5>
+                <table class="table">
+                    <tr>
+                        <th>Назва:</th>
+                        <td>{{ product.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Слаг:</th>
+                        <td>{{ product.slug }}</td>
+                    </tr>
+                    <tr>
+                        <th>Ціна:</th>
+                        <td>{{ product.price }}$</td>
+                    </tr>
+                    <tr>
+                        <th>Кількість товару:</th>
+                        <td>{{ product.product_qty }}</td>
+                    </tr>
+                    <tr>
+                        <th>Кількість відгуків:</th>
+                        <td>{{ product.reviews_qty }}</td>
+                    </tr>
+                    <tr>
+                        <th>Категорія:</th>
+                        <td><a href="{% url 'category-detail' product.category.slug %}">{{ product.category.title }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Дата створення:</th>
+                        <td>{{ product.created_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Дата оновлення:</th>
+                        <td>{{ product.updated_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'products' %}" class="btn btn-secondary">← Назад до продуктів</a>
+</div>
+{% endblock %}

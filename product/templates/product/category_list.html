@@ -1,0 +1,46 @@
+{% extends 'product/layout.html' %}
+
+{% block title %}Категорії - Мій Магазин{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Категорії</h1>
+    <a href="{% url 'category-create' %}" class="btn btn-success">Створити категорію</a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    {% for category in categories %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ category.title }}</h5>
+                <p class="card-text">
+                    <small class="text-muted">Створено: {{ category.created_at|date:"d.m.Y H:i" }}</small>
+                </p>
+                <div class="btn-group" role="group">
+                    <a href="{% url 'category-detail' category.slug %}" class="btn btn-primary btn-sm">Переглянути</a>
+                    <a href="{% url 'category-update' category.slug %}" class="btn btn-warning btn-sm">Редагувати</a>
+                    <a href="{% url 'category-delete' category.slug %}" class="btn btn-danger btn-sm">Видалити</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h4>Категорії не знайдено</h4>
+            <p>Поки що немає створених категорій. <a href="{% url 'category-create' %}">Створити першу категорію</a></p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

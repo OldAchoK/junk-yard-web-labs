@@ -1,0 +1,73 @@
+{% extends 'product/layout.html' %}
+
+{% block title %}Продукти - Мій Магазин{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Продукти</h1>
+    <a href="{% url 'product-create' %}" class="btn btn-success">Створити продукт</a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text">
+                    <strong>Ціна:</strong> {{ product.price }}$<br>
+                    <strong>Кількість:</strong> {{ product.product_qty }}<br>
+                    <strong>Відгуки:</strong> {{ product.reviews_qty }}<br>
+                    <strong>Категорія:</strong> {{ product.category.title }}
+                </p>
+                <small class="text-muted">{{ product.created_at|date:"d.m.Y H:i" }}</small>
+                <div class="btn-group d-block mt-2" role="group">
+                    <a href="{% url 'product-detail' product.slug %}" class="btn btn-primary btn-sm">Переглянути</a>
+                    <a href="{% url 'product-update' product.slug %}" class="btn btn-warning btn-sm">Редагувати</a>
+                    <a href="{% url 'product-delete' product.slug %}" class="btn btn-danger btn-sm">Видалити</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <h4>Продукти не знайдено</h4>
+            <p>Поки що немає створених продуктів. <a href="{% url 'product-create' %}">Створити перший продукт</a></p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<nav aria-label="Навігація по сторінках">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Попередня</a>
+            </li>
+        {% endif %}
+        
+        <li class="page-item active">
+            <span class="page-link">{{ page_obj.number }} з {{ page_obj.paginator.num_pages }}</span>
+        </li>
+        
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Наступна</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

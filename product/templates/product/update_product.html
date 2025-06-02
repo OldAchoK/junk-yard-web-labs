@@ -1,0 +1,276 @@
+{% extends 'product/layout.html' %}
+
+{% block title %}Редагувати {{ product.title }} - Мій Магазин{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="mb-0">Редагувати продукт: {{ product.title }}</h1>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Product Title -->
+                    <div class="mb-3">
+                        {{ form.title.label_tag }}
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.title.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Введіть назву продукту</div>
+                    </div>
+                    
+                    <!-- Price and Quantity Row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.price.label_tag }}
+                                <div class="input-group">
+                                    {{ form.price }}
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                {% if form.price.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.price.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Ціна в доларах США</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.product_qty.label_tag }}
+                                {{ form.product_qty }}
+                                {% if form.product_qty.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.product_qty.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Кількість товару на складі</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews and Category Row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.reviews_qty.label_tag }}
+                                {{ form.reviews_qty }}
+                                {% if form.reviews_qty.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.reviews_qty.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Кількість отриманих відгуків</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.category.label_tag }}
+                                {{ form.category }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.category.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Оберіть категорію продукту</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Product Info -->
+                    <div class="alert alert-info">
+                        <h6>Поточна інформація:</h6>
+                        <ul class="mb-0">
+                            <li><strong>Слаг:</strong> {{ product.slug }}</li>
+                            <li><strong>Дата створення:</strong> {{ product.created_at|date:"d.m.Y H:i" }}</li>
+                            <li><strong>Дата останнього оновлення:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg"></i> Зберегти зміни
+                            </button>
+                            <a href="{% url 'product-detail' product.slug %}" class="btn btn-secondary">
+                                <i class="bi bi-x-lg"></i> Скасувати
+                            </a>
+                        </div>
+                        <div class="text-muted">
+                            <small>* Всі поля обов'язкові для заповнення</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Additional Actions -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <h6 class="card-title">Додаткові дії</h6>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{% url 'product-detail' product.slug %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-eye"></i> Переглянути продукт
+                    </a>
+                    <a href="{% url 'products' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-list"></i> Всі продукти
+                    </a>
+                    <a href="{% url 'category-detail' product.category.slug %}" class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-folder"></i> Категорія: {{ product.category.title }}
+                    </a>
+                    <a href="{% url 'product-delete' product.slug %}" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i> Видалити продукт
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Tips Modal -->
+<div class="modal fade" id="tipsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Поради по редагуванню</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li><strong>Назва продукту:</strong> Використовуйте зрозумілу та описову назву</li>
+                    <li><strong>Ціна:</strong> Вказуйте ціну в доларах США з точністю до центів</li>
+                    <li><strong>Кількість:</strong> Оновлюйте кількість товару регулярно</li>
+                    <li><strong>Відгуки:</strong> Кількість відгуків допомагає покупцям приймати рішення</li>
+                    <li><strong>Категорія:</strong> Оберіть найбільш підходящу категорію</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Зрозуміло</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tips Button (Fixed Position) -->
+<button type="button" class="btn btn-info position-fixed" style="bottom: 20px; right: 20px; z-index: 1000;" data-bs-toggle="modal" data-bs-target="#tipsModal">
+    <i class="bi bi-question-circle"></i> Поради
+</button>
+
+<style>
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.input-group-text {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+}
+
+.alert-info {
+    background-color: #cff4fc;
+    border-color: #b6effb;
+    color: #055160;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.btn-group .btn {
+    margin-right: 5px;
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.875em;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-hide alerts after 5 seconds
+    const alerts = document.querySelectorAll('.alert-dismissible');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    });
+
+    // Form validation feedback
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input, select');
+    
+    inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() === '' && this.hasAttribute('required')) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            }
+        });
+    });
+
+    // Price input formatting
+    const priceInput = document.querySelector('input[name="price"]');
+    if (priceInput) {
+        priceInput.addEventListener('input', function() {
+            let value = this.value;
+            // Remove any non-numeric characters except decimal point
+            value = value.replace(/[^0-9.]/g, '');
+            // Ensure only one decimal point
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+            // Limit decimal places to 2
+            if (parts[1] && parts[1].length > 2) {
+                value = parts[0] + '.' + parts[1].substring(0, 2);
+            }
+            this.value = value;
+        });
+    }
+
+    // Quantity inputs - only allow positive integers
+    const qtyInputs = document.querySelectorAll('input[name="product_qty"], input[name="reviews_qty"]');
+    qtyInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (parseInt(this.value) < 0) {
+                this.value = '0';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

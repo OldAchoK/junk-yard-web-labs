@@ -1,0 +1,51 @@
+{% extends 'product/layout.html' %}
+
+{% block title %}{{ category.title }} - Мій Магазин{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{{ category.title }}</h1>
+    <div class="btn-group">
+        <a href="{% url 'category-update' category.slug %}" class="btn btn-warning">Редагувати</a>
+        <a href="{% url 'category-delete' category.slug %}" class="btn btn-danger">Видалити</a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <p><strong>Слаг:</strong> {{ category.slug }}</p>
+                <p><strong>Дата створення:</strong> {{ category.created_at|date:"d.m.Y H:i" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3>Продукти в цій категорії</h3>
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text">
+                    <strong>Ціна:</strong> {{ product.price }}$<br>
+                    <strong>Кількість:</strong> {{ product.product_qty }}<br>
+                    <strong>Відгуки:</strong> {{ product.reviews_qty }}
+                </p>
+                <a href="{% url 'product-detail' product.slug %}" class="btn btn-primary btn-sm">Переглянути</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <p>В цій категорії поки що немає продуктів.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<a href="{% url 'categories' %}" class="btn btn-secondary">← Назад до категорій</a>
+{% endblock %}

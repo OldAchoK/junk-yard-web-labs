@@ -1,0 +1,38 @@
+{% extends 'product/layout.html' %}
+
+{% block title %}Видалити {{ product.title }} - Мій Магазин{% endblock %}
+
+{% block content %}
+<h1>Видалити продукт</h1>
+
+<div class="alert alert-danger">
+    <h4>Ви впевнені, що хочете видалити продукт "{{ product.title }}"?</h4>
+    <p>Ця дія незворотна.</p>
+    
+    <div class="card mt-3">
+        <div class="card-body">
+            <h6>Деталі продукту:</h6>
+            <p><strong>Назва:</strong> {{ product.title }}</p>
+            <p><strong>Ціна:</strong> {{ product.price }}$</p>
+            <p><strong>Категорія:</strong> {{ product.category.title }}</p>
+        </div>
+    </div>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Так, видалити</button>
+        <a href="{% url 'product-detail' product.slug %}" class="btn btn-secondary">Скасувати</a>
+    </div>
+</form>
+{% endblock %} form.title.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-success">Створити категорію</button>
+        <a href="{% url 'categories' %}" class="btn btn-secondary">Скасувати</a>
+    </div>
+</form>
+{% endblock %}
